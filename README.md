@@ -14,5 +14,5 @@ pip install -r requirements.txt
 
 ## Run the app (with reload)
 ```bash
-flask run --reload
+python app.py --reload
 ```

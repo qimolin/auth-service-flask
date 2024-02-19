@@ -2,7 +2,6 @@ import base64
 import hashlib
 import hmac
 import json
-from flask import jsonify
 from datetime import datetime, timedelta
 
 def base64url_encode(data):
@@ -55,10 +54,7 @@ def verify_jwt(jwt_token, secret):
     test_signature = hmac.new(secret.encode(), signing_input, hashlib.sha256).digest()
     
     if hmac.compare_digest(test_signature, decoded_signature):
-      return jsonify({"message": "JWT valid"}), 200
-    else: return jsonify({"error": "Forbidden, JWT invalid"}), 403
+      return {"message": "JWT valid"}, 200
+    else: return {"error": "Forbidden, JWT invalid"}, 403
 
-  else: return jsonify({"error": "Forbidden, token expired"}), 403
-
-  
-
+  else: return {"error": "Forbidden, token expired"}, 403

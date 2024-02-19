@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from flask import Flask, request, jsonify
 from flask_bcrypt import Bcrypt
 from jwt_utils import create_jwt
+import settings
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -10,7 +11,10 @@ bcrypt = Bcrypt(app)
 app.config["MONGO_URI"] = "mongodb://localhost:27017/authDatabase"
 mongo = PyMongo(app)
 
-secretKey = os.getenv("JWT_SECRET_KEY")
+secretKey = settings.JWT_SECRET_KEY
+
+if secretKey is None:
+    raise ValueError("JWT_SECRET_KEY environment variable is not set")
 
 @app.post('/users')
 def register():

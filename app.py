@@ -4,7 +4,8 @@ from flask_bcrypt import Bcrypt
 from utils.jwt_utils import create_jwt
 from utils.rsa_key_utils import generate_key_pair, load_private_key, load_public_key
 from cryptography.hazmat.primitives import serialization
-
+from middlewares.auth_middleware import auth_required
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -35,10 +36,32 @@ def register():
     return {"message": "User registered successfully"}, 201
 
 @app.put('/users')
-def update_password():
-    # TODO: Implement password update
-    pass
+@auth_required(return_user_id=True)
+def update_password(user_id):
+    data = request.get_json()
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+    
+    if old_password == new_password:
+        return abort(403, "New password cannot be the same as old password")
 
+    user =  mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    
+    if not user:
+        return abort(403)
+
+    hashed_password = user['password']
+    
+    if bcrypt.check_password_hash(hashed_password, old_password):
+        new_hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
+        updated = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"password": new_hashed_password}})
+        if updated.modified_count > 0:
+            return {"message": "Password updated successfully"}, 200
+        else:
+            return abort(403, "Failed to update password")
+    else:
+        return abort(403, "Incorrect old password")
+    
 @app.post('/users/login')
 def login():
     data = request.get_json()
@@ -57,8 +80,8 @@ def login():
     else:
         return abort(403)
 
-# Can be made more secure using k8s secrets
 @app.get('/public-key')
+@auth_required()
 def get_public_key():
     public_key = load_public_key()
     pem_public_key = public_key.public_bytes(

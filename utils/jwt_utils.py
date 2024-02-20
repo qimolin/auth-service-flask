@@ -63,9 +63,11 @@ def verify_jwt(jwt_token, public_key):
                 padding.PKCS1v15(),
                 hashes.SHA256()
             )
-            return {"message": "JWT valid"}, 200
+            # Extract user_id from the decoded payload
+            user_id = decoded_payload.get('user_id')
+            return {"message": "JWT valid", "user_id": user_id}
         except:
-            return {"error": "Forbidden, JWT invalid"}, 403
+            return {"error": "Forbidden, JWT invalid"}
 
     else:
-        return {"error": "Forbidden, token expired"}, 403
+        return {"error": "Forbidden, token expired"}

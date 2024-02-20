@@ -15,9 +15,9 @@ def generate_key_pair():
     private_key_path = "private.pem"
     public_key_path = "public.pem"
     
-    # Check if key files already exist
+    # Check if key pair already exist
     if os.path.exists(private_key_path) and os.path.exists(public_key_path):
-        print("Key files already exist.")
+        print("Key pair already exist.")
         return
 
     # Generate new key pair

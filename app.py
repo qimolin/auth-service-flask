@@ -1,11 +1,8 @@
 from flask_pymongo import PyMongo
 from flask import Flask, request
 from flask_bcrypt import Bcrypt
-from utils.jwt_utils import create_jwt
+from utils.jwt_utils import create_jwt, verify_jwt
 from utils.rsa_key_utils import generate_key_pair, load_private_key, load_public_key
-from cryptography.hazmat.primitives import serialization
-from middlewares.auth_middleware import auth_required
-from bson.objectid import ObjectId
 
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
@@ -80,16 +77,21 @@ def login():
     else:
         return {"detail": "forbidden"}, 403
 
-@app.get('/public-key')
-@auth_required
-def get_public_key():
+@app.post('/auth')
+def verify_auth():
+    data = request.get_json()
+    token = data.get('token')
+    
+    # Load public key
     public_key = load_public_key()
-    pem_public_key = public_key.public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo
-    ).decode('utf-8')
-    return {"public_key": pem_public_key}, 200
 
+    # Verify the JWT token
+    result = verify_jwt(token, public_key)
+    
+    if 'error' in result:
+        return {'valid': False}, 403
+    else: 
+        return {'valid': True, 'user_id': result['user_id']}, 200
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)

@@ -1,5 +1,5 @@
 from flask_pymongo import PyMongo
-from flask import Flask, request, abort
+from flask import Flask, request
 from flask_bcrypt import Bcrypt
 from utils.jwt_utils import create_jwt
 from utils.rsa_key_utils import generate_key_pair, load_private_key, load_public_key
@@ -24,7 +24,7 @@ def register():
     password = data.get('password')
 
     if mongo.db.users.find_one({"username": username}):
-        return {"error": "Duplicate username"}, 409
+        return {"detail": "duplicate"}, 409
 
     encrypted_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -36,31 +36,31 @@ def register():
     return {"message": "User registered successfully"}, 201
 
 @app.put('/users')
-@auth_required(return_user_id=True)
-def update_password(user_id):
+def update_password():
     data = request.get_json()
-    old_password = data.get('old_password')
+    username = data.get('username')
+    password = data.get('password')
     new_password = data.get('new_password')
     
-    if old_password == new_password:
-        return abort(403, "New password cannot be the same as old password")
+    if password == new_password:
+        return {"detail": "forbidden"}, 403
 
-    user =  mongo.db.users.find_one({"_id": ObjectId(user_id)})
+    user =  mongo.db.users.find_one({"username": username})
     
     if not user:
-        return abort(403)
+        return {"detail": "forbidden"}, 403
 
     hashed_password = user['password']
     
-    if bcrypt.check_password_hash(hashed_password, old_password):
+    if bcrypt.check_password_hash(hashed_password, password):
         new_hashed_password = bcrypt.generate_password_hash(new_password).decode('utf-8')
-        updated = mongo.db.users.update_one({"_id": ObjectId(user_id)}, {"$set": {"password": new_hashed_password}})
+        updated = mongo.db.users.update_one({"username": username}, {"$set": {"password": new_hashed_password}})
         if updated.modified_count > 0:
             return {"message": "Password updated successfully"}, 200
         else:
-            return abort(403, "Failed to update password")
+            return {"detail": "forbidden"}, 403
     else:
-        return abort(403, "Incorrect old password")
+        return {"detail": "forbidden"}, 403
     
 @app.post('/users/login')
 def login():
@@ -76,12 +76,12 @@ def login():
             token = create_jwt(str(user['_id']), private_key)
             return {"token": token}, 200  # Return the JWT token
         else:
-            return abort(403)
+            return {"detail": "forbidden"}, 403
     else:
-        return abort(403)
+        return {"detail": "forbidden"}, 403
 
 @app.get('/public-key')
-@auth_required()
+@auth_required
 def get_public_key():
     public_key = load_public_key()
     pem_public_key = public_key.public_bytes(

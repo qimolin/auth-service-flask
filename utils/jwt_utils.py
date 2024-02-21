@@ -40,9 +40,9 @@ def create_jwt(user_id, private_key):
     return encoded_string
 
 def base64url_decode(input):
-    rem = len(input) % 4
-    if rem > 0:
-        input += '=' * (4 - rem)
+    missing_padding = len(input) % 4
+    if missing_padding > 0:
+        input += '=' * (4 - missing_padding)
     return base64.urlsafe_b64decode(input)
 
 def verify_jwt(jwt_token, public_key):
@@ -52,7 +52,7 @@ def verify_jwt(jwt_token, public_key):
             raise ValueError("Invalid JWT token format")
         header, payload, signature = segments
 
-        decoded_payload = json.loads(base64url_decode(payload).decode())
+        decoded_payload = json.loads(base64url_decode(payload))
 
         if datetime.utcnow().timestamp() <= decoded_payload['exp']:
             decoded_signature = base64url_decode(signature)

@@ -1,6 +1,12 @@
 # Auth Service Flask
 This repo is part of the UvA course Web Services and Cloud-Based Systems. It is a simple auth service implemented in Flask.
 
+## Dependencies
+- Python 3.11
+- Flask
+- PyMongo
+- Docker
+
 ## Create a venv
 ```bash
 python -m venv .venv
@@ -15,6 +21,12 @@ pip install -r requirements.txt
 ## Run the app (with reload)
 ```bash
 python app.py --reload
+```
+
+## Run the app with Docker
+```bash
+docker build -t auth-service-flask .
+docker run -p 5001:5001 auth-service-flask
 ```
 
 ## Install mongodb [(Install guide)](https://www.mongodb.com/docs/manual/administration/install-community/)

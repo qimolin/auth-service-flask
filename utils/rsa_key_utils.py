@@ -5,7 +5,7 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
-dotenv_path = join(dirname(__file__), '.env')
+dotenv_path = join(dirname(dirname(__file__)), '.env')
 load_dotenv(dotenv_path)
 
 _PRIVATE_KEY_PASSWORD = os.getenv("PRIVATE_KEY_PASSWORD")

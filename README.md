@@ -17,6 +17,10 @@ python -m venv .venv
 ```bash
 pip install -r requirements.txt
 ```
+## Create a .env file
+```bash
+set PRIVATE_KEY_PASSWORD to a password
+```
 
 ## Run the app (with reload)
 ```bash

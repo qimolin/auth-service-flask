@@ -1,0 +1,28 @@
+version: '3.7'
+services:
+  api:
+    build: .
+    ports:
+      - '5001:5001'
+    environment:
+      PRIVATE_KEY_PASSWORD: 'password'
+    networks:
+      - auth-service-network
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./mongo-data:/data/mongo
+    networks:
+      - auth-service-network
+
+networks:
+  auth-service-network:
+    driver: bridge
+
+volumes:
+  mongo-data:

@@ -9,4 +9,4 @@ COPY . .
 
 EXPOSE 5001
 
-CMD ["flask", "run"]
+CMD ["python", "./app.py"]

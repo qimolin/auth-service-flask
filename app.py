@@ -4,10 +4,13 @@ from flask_bcrypt import Bcrypt
 from utils.jwt_utils import create_jwt, verify_jwt
 from utils.rsa_key_utils import generate_key_pair, load_private_key, load_public_key
 
+import os
+
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-app.config["MONGO_URI"] = "mongodb://root:example@mongo:27017/authDatabase?authSource=admin"
+app.config["MONGO_URI"] = os.getenv("MONGO_URI")
+
 mongo = PyMongo(app)
 
 generate_key_pair()

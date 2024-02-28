@@ -1,13 +1,15 @@
 version: '3.7'
 services:
-  api:
+  auth-service:
     build: .
     ports:
       - '5001:5001'
     environment:
       PRIVATE_KEY_PASSWORD: 'password'
+      MONGO_URI: 'mongodb://root:example@mongo:27017/authDatabase?authSource=admin'
     networks:
       - auth-service-network
+      - shared-network
   mongo:
     image: mongo
     ports:
@@ -22,6 +24,9 @@ services:
 
 networks:
   auth-service-network:
+    driver: bridge
+  shared-network:
+    name: shared-network
     driver: bridge
 
 volumes:

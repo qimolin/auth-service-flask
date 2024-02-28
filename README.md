@@ -58,7 +58,7 @@ brew install mongodb-community@7.0
 brew services start mongodb-community@7.0
 ```
 
-## To test data persistence
+## To test data persistence locally
 1- run `docker-compose up -d`
 2- run tests to populate data `python3 test_auth.py`
 3- test data persists after running `docker-compose restart`
@@ -71,3 +71,12 @@ brew services start mongodb-community@7.0
 7 - Repeat step 3 to ensure user data still persists
 
 
+## for uploading deployment files to our cluster
+example for copying deployment files from local to control node:
+`scp ingress.yaml student145@145.100.135.145:/home/student145/deployments`
+
+apply deployments inside the control node:
+`kubectl apply -f .`
+
+run the tests: 
+`kubectl exec auth-service-5dc8b74756-vpzc2 -- python /app/tests/test_auth.py`

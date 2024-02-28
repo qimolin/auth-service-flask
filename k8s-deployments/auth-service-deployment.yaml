@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-api
+        image: rawalsaadi/auth-service:latest # please make the packages public so we can use our created github images instead
+        # ghcr.io/qimolin/auth-service:latest
+        ports:
+        - containerPort: 5001
+        env:
+        - name: PRIVATE_KEY_PASSWORD
+          value: "password"
+        - name: MONGO_URI
+          value: "mongodb://root:example@mongodb-service:27017/authDatabase?authSource=admin"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      imagePullSecrets:
+      - name: dhubsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: auth-service
+  type: ClusterIP
+  ports:
+  - port: 5001
+    targetPort: 5001
+
+  
+

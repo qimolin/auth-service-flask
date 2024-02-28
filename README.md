@@ -20,6 +20,7 @@ pip install -r requirements.txt
 ## Create a .env file
 ```bash
 set PRIVATE_KEY_PASSWORD to a password
+set MONGO_URI to "mongodb://root:example@mongo:27017/authDatabase?authSource=admin"
 ```
 
 ## Run the app (with reload)

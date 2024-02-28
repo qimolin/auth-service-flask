@@ -58,25 +58,40 @@ brew install mongodb-community@7.0
 brew services start mongodb-community@7.0
 ```
 
-## To test data persistence locally
+## To test data persistency locally
 1- run `docker-compose up -d`
 2- run tests to populate data `python3 test_auth.py`
 3- test data persists after running `docker-compose restart`
    - `docker exec -it auth-service-flask-mongo-1 bash`
-   - `mongosh`
-   - use admin `db.getSiblingDB('admin').auth('root', 'example');` 
+   - use admin db to authenticate `mongosh -u root -p example --authenticationDatabase admin`
+   - switch to db `use authDatabase`
    - user data persists `db.users.find({})`
 5 - `docker-compose down`
 6 - `docker-compose up -d`
 7 - Repeat step 3 to ensure user data still persists
-
+8- clear users collection if needed `db.users.deleteMany({})`
 
 ## for uploading deployment files to our cluster
 example for copying deployment files from local to control node:
-`scp ingress.yaml student145@145.100.135.145:/home/student145/deployments`
+`scp <deployment-file.yaml> student145@145.100.135.145:/home/student145/deployments`
 
 apply deployments inside the control node:
 `kubectl apply -f .`
 
-run the tests: 
-`kubectl exec auth-service-5dc8b74756-vpzc2 -- python /app/tests/test_auth.py`
+to run the tests on the control node and create users in db: 
+`kubectl exec <auth-service-pod> -- python /app/tests/test_auth.py`
+
+- To test auth service from local machine using contol node's IP `145.100.135.145` and the NodePort exposed for the Ingress controller `31660`
+- use curl create user:
+curl -X POST http://145.100.135.145:31660/auth/users \
+     -H "Content-Type: application/json" \
+     -d '{"username":"my_username3", "password":"my_password3"}'
+
+- use curl to login:
+curl -X POST http://145.100.135.145:31660/auth/users/login \
+     -H "Content-Type: application/json" \
+     -d '{"username":"my_username3", "password":"my_password3"}'
+
+- to check database `kubectl exec -it <mongodb-deployment-pod> -- bash`, and use admin db to authenticate `mongosh -u root -p example --authenticationDatabase admin`
+   - or one liner code `kubectl exec -it $(kubectl get pod -l app=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p example --authenticationDatabase admin`
+- switch to db `use authDatabase` and display users collection `db.users.find({})`

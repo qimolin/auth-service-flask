@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: auth-api
-        image: rawalsaadi/auth-service:latest # please make the packages public so we can use our created github images instead
-        # ghcr.io/qimolin/auth-service:latest
+        image: ghcr.io/qimolin/auth-service:latest
         ports:
         - containerPort: 5001
         env:
@@ -30,8 +29,6 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-      imagePullSecrets:
-      - name: dhubsecret
 ---
 apiVersion: v1
 kind: Service

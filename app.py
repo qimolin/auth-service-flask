@@ -7,7 +7,7 @@ from utils.rsa_key_utils import generate_key_pair, load_private_key, load_public
 app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
-app.config["MONGO_URI"] = "mongodb://localhost:27017/authDatabase"
+app.config["MONGO_URI"] = "mongodb://root:example@mongo:27017/authDatabase?authSource=admin"
 mongo = PyMongo(app)
 
 generate_key_pair()

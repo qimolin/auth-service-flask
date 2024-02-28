@@ -3,3 +3,5 @@
 dump.rdb
 __pycache__
 *.pem
+mongo-data
+.DS_Store

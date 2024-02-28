@@ -56,3 +56,17 @@ brew tap mongodb/brew
 brew install mongodb-community@7.0
 brew services start mongodb-community@7.0
 ```
+
+## To test data persistence
+1- run `docker-compose up -d`
+2- run tests to populate data `python3 test_auth.py`
+3- test data persists after running `docker-compose restart`
+   - `docker exec -it auth-service-flask-mongo-1 bash`
+   - `mongosh`
+   - use admin `db.getSiblingDB('admin').auth('root', 'example');` 
+   - user data persists `db.users.find({})`
+5 - `docker-compose down`
+6 - `docker-compose up -d`
+7 - Repeat step 3 to ensure user data still persists
+
+

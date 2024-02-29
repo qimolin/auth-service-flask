@@ -42,13 +42,14 @@ jobs:
     needs: build-and-push
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up kubectl
-      uses: azure/setup-kubectl@v3
+      uses: actions-hub/kubectl@master
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
       with:
-        method: kubeconfig
-        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+        arg: get pods
 
     - name: Deploy auth service
       run: |

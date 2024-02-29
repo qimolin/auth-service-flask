@@ -83,14 +83,10 @@ to run the tests on the control node and create users in db:
 
 - To test auth service from local machine using contol node's IP `145.100.135.145` and the NodePort exposed for the Ingress controller `31660`
 - use curl create user:
-curl -X POST http://145.100.135.145:31660/auth/users \
-     -H "Content-Type: application/json" \
-     -d '{"username":"my_username3", "password":"my_password3"}'
+curl -X POST http://145.100.135.145:31660/auth/users -H "Content-Type: application/json" -d '{"username":"my_username3", "password":"my_password3"}'
 
 - use curl to login:
-curl -X POST http://145.100.135.145:31660/auth/users/login \
-     -H "Content-Type: application/json" \
-     -d '{"username":"my_username3", "password":"my_password3"}'
+curl -X POST http://145.100.135.145:31660/auth/users/login -H "Content-Type: application/json" -d '{"username":"my_username3", "password":"my_password3"}'
 
 - to check database `kubectl exec -it <mongodb-deployment-pod> -- bash`, and use admin db to authenticate `mongosh -u root -p example --authenticationDatabase admin`
    - or one liner code `kubectl exec -it $(kubectl get pod -l app=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p example --authenticationDatabase admin`

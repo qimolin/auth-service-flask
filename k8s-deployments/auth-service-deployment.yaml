@@ -37,10 +37,11 @@ metadata:
 spec:
   selector:
     app: auth-service
-  type: ClusterIP
   ports:
-  - port: 5001
-    targetPort: 5001
+    - protocol: TCP
+      port: 5001
+      targetPort: 5001
+  type: ClusterIP
 
   
 

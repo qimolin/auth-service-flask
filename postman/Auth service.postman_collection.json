@@ -1,0 +1,146 @@
+{
+	"info": {
+		"_postman_id": "2c2035cf-7c50-4b9b-8523-1fd1e6dd796e",
+		"name": "Auth service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13076959",
+		"_collection_link": "https://speeding-shadow-627632.postman.co/workspace/Web-Services-and-Cloud-Based-Sy~aeac0457-2a20-4432-84ef-77405c99de57/collection/13076959-2c2035cf-7c50-4b9b-8523-1fd1e6dd796e?action=share&source=collection_link&creator=13076959"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"qimolin9\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{authURL}}/users",
+					"host": [
+						"{{authURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"qimolin9\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{authURL}}/users/login",
+					"host": [
+						"{{authURL}}"
+					],
+					"path": [
+						"users",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjVkM2RiZDNlNTI1MzI5M2Q0MTQwZTc5IiwiZXhwIjoxNzA4NDY4MjcyLjMwOTc3Nn0.deXl2OTyoJrYJ9bGRtneKlhVF1Ro3jjri-xxxT4VnOdSp37NPpwvoJsoH26Zo9D8iHOdJbTMsHiIIFKYSUMRwhpJUXbWCdFMAQTiqNGebLfKyqhiRhgMOkg4weE8p4zsDe6cRFmx9T9bhI17wEk2lU5dylURI7PT3fHuVxjCDpIkUbeT4aFNsuc5DcqnVPWqjoQF38BbcKFnpUG6qB76bxgM3Upe6kIs7if2r4bC4-_SEjtjaD9aCfX_TODlMdamHO6upm2jOKMbAp9bsZmVriuHZrPeRcNdiGlfHIWcF7p5j0j-qXJ0qNroAKPkszUBEyruBFsQTKJAv8_sxpCQJg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"old_password\": \"newpassword\",\n    \"new_password\": \"newpassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{authURL}}/users",
+					"host": [
+						"{{authURL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Verify auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjVkNTJjNTBhOTQxZDMyY2MwNmQ4NzExIiwiZXhwIjoxNzA4NTUyMTMzLjU4NzQ2OX0.KdpTVF2ky0VldbuizEJijpfo4jqeiDrLYFKeRAoPkdcfAzWgyMEqSGomTyTIw173dS2R42oTAgdMLiaGgoJ_Z2CN7ck40rfd2F1MSq1wOCj2ndWfRNzpDPxb4ul0h094Ac4ZjtTz6F0GJ13ahBVkrb02SXVkWohlpCrBmcTWSuOIdg-OEXMp8g2IoDZ9I_KB5cwPwGUGdhGf7uNlDHpSz4Mci9eBRdaQHFzJhH5RKZ3IvZRBXvq28Ct0aSlrbClAleK6uKA88Q64u3ZPhm-5dTbFzDQKokM3PSiolQ7Abqh7bfIXJXCBp0zy-YRjgqbA47BK4MQbd_j1m2wZIaNklg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{authURL}}/auth",
+					"host": [
+						"{{authURL}}"
+					],
+					"path": [
+						"auth"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

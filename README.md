@@ -91,3 +91,10 @@ curl -X POST http://145.100.135.145:31660/auth/users/login -H "Content-Type: app
 - to check database `kubectl exec -it <mongodb-deployment-pod> -- bash`, and use admin db to authenticate `mongosh -u root -p example --authenticationDatabase admin`
    - or one liner code `kubectl exec -it $(kubectl get pod -l app=mongodb -o jsonpath="{.items[0].metadata.name}") -- mongosh -u root -p example --authenticationDatabase admin`
 - switch to db `use authDatabase` and display users collection `db.users.find({})`
+- 
+## Test endpoints using Postman
+- Import the environment `Cluster.postman_environment.json` to Postman
+- Import the environment `Local.postman_environment.json` to Postman
+- Import the collection `URL Shortener.postman_collection.json` to Postman
+- Run the collection to test the endpoints
+- Note: you can switch between the environments to test the endpoints on the local machine or the cluster

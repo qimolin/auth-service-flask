@@ -37,6 +37,7 @@ jobs:
         platforms: linux/arm64, linux/amd64
     
   deploy-kubernetes:
+    name: Deploy Auth Service deployment to Kubernetes
     runs-on: ubuntu-latest
     needs: build-and-push
     steps:
@@ -46,7 +47,6 @@ jobs:
     - name: Set up kubectl
       uses: azure/setup-kubectl@v3
       with:
-        version: default
         method: kubeconfig
         kubeconfig: ${{ secrets.KUBE_CONFIG }}
 
